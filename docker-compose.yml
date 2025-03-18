@@ -1,11 +1,11 @@
 services:
   database:
     image: mysql:8.0
-    container_name: api_course_db
+    container_name: database
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: apiSymfony
+      MYSQL_DATABASE: db
       MYSQL_USER: user
       MYSQL_PASSWORD: password
     ports:
