@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use AllowDynamicProperties;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -155,24 +154,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->plainPassword = null;
     }
 
-    public function getfirstName(): ?string
+    public function getFirstName(): ?string
     {
         return $this->firstName;
     }
 
-    public function setfirstName(string $firstName): static
+    public function setFirstName(string $firstName): static
     {
         $this->firstName = $firstName;
 
         return $this;
     }
 
-    public function getlastName(): ?string
+    public function getLastName(): ?string
     {
         return $this->lastName;
     }
 
-    public function setlastName(string $lastName): static
+    public function setLastName(string $lastName): static
     {
         $this->lastName = $lastName;
 
