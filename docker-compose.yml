@@ -1,0 +1,22 @@
+services:
+  database:
+    image: mysql:8.0
+    container_name: api_course_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: apiSymfony
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - api_course_network
+
+volumes:
+  db_data:
+
+networks:
+  api_course_network:
