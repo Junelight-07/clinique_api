@@ -25,15 +25,6 @@ class Media
     #[ORM\OneToOne(mappedBy: 'picture', cascade: ['persist', 'remove'])]
     private ?Animal $animal = null;
 
-    /**
-     * @var Collection<int, Consultation>
-     */
-
-    public function __construct()
-    {
-        $this->consultations = new ArrayCollection();
-    }
-
     public function getId(): ?int
     {
         return $this->id;
@@ -69,33 +60,6 @@ class Media
         }
 
         $this->animal = $animal;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Consultation>
-     */
-    public function getConsultations(): Collection
-    {
-        return $this->consultations;
-    }
-
-    public function addConsultation(Consultation $consultation): static
-    {
-        if (!$this->consultations->contains($consultation)) {
-            $this->consultations->add($consultation);
-            $consultation->addTraitement($this);
-        }
-
-        return $this;
-    }
-
-    public function removeConsultation(Consultation $consultation): static
-    {
-        if ($this->consultations->removeElement($consultation)) {
-            $consultation->removeTraitement($this);
-        }
 
         return $this;
     }
