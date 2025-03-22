@@ -3,48 +3,24 @@
 namespace App\Entity;
 
 use App\Repository\AnimalRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use Symfony\Component\Serializer\Attribute\Groups;
-//use ApiPlatform\Metadata\ApiFilter;
-//use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
-//use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\Delete;
-use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
-use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 
 #[ApiResource(
-    operations: [
-        new GetCollection(),
-        new Post(
-            security: "is_granted('ROLE_ASSISTANT')",
-            securityMessage: "Seuls les assistants peuvent créer des fiches animal."
-        ),
-        new Get(),
-        new Put(
-            security: "is_granted('ROLE_ASSISTANT')",
-            securityMessage: "Seuls les assistants peuvent modifier des fiches animal."
-        ),
-        new Patch(
-            security: "is_granted('ROLE_ASSISTANT')",
-            securityMessage: "Seuls les assistants peuvent modifier des fiches animal."
-        ),
-        new Delete(
-            security: "is_granted('ROLE_ASSISTANT')",
-            securityMessage: "Seul les assistants peuvet supprimer une fiche animal."
-        ),
-    ],
-    normalizationContext: ['groups' => ['animal:read']],
-    denormalizationContext: ['groups' => ['animal:write']],
+    forceEager: false,
+    normalizationContext: ['groups' => ['read']],
+    denormalizationContext: ['groups' => ['write']],
 )]
 #[ORM\Entity(repositoryClass: AnimalRepository::class)]
-//#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'title' => 'partial', 'content' => 'partial'])]
-//#[ApiFilter(OrderFilter::class, properties: ['id', 'createdDate'], arguments: ['orderParameterName' => 'order'])]
+#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'title' => 'partial', 'content' => 'partial'])]
+#[ApiFilter(OrderFilter::class, properties: ['id', 'createdDate'], arguments: ['orderParameterName' => 'order'])]
 class Animal
 {
     #[Groups('read')]

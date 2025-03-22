@@ -6,42 +6,7 @@ use App\Repository\TreatmentRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\Delete;
-use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
-use ApiPlatform\Metadata\Patch;
 
-#[ApiResource(
-    operations: [
-        new GetCollection(
-            security: "is_granted('ROLE_ASSISTANT')"
-        ),
-        new Post(
-            security: "is_granted('ROLE_VETERINARIAN')",
-            securityMessage: "Seuls les vétérinaires peuvent créer un traitement."
-        ),
-        new Get(
-            security: "is_granted('ROLE_ASSISTANT')"
-        ),
-        new Put(
-            security: "is_granted('ROLE_VETERINARIAN')",
-            securityMessage: "Seuls les vétérinaires peuvent modifier un traitement."
-        ),
-        new Patch(
-            security: "is_granted('ROLE_VETERINARIAN')",
-            securityMessage: "Seuls les vétérinaires peuvent modifier un traitement."
-        ),
-        new Delete(
-            security: "is_granted('ROLE_VETERINARIAN')",
-            securityMessage: "Seuls les vétérinaires peuvent supprimer un traitement."
-        ),
-    ],
-    normalizationContext: ['groups' => ['traitement:read']],
-    denormalizationContext: ['groups' => ['traitement:write']],
-)]
 #[ORM\Entity(repositoryClass: TreatmentRepository::class)]
 class Treatment
 {

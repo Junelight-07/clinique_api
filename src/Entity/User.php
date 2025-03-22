@@ -19,30 +19,16 @@ use ApiPlatform\Metadata\Put;
 use App\State\UserPasswordHasherProcessor;
 
 #[ApiResource(
+    normalizationContext: ['groups' => ['read']],
+    denormalizationContext: ['groups' => ['write']],
     operations: [
-        new GetCollection(
-            security: "is_granted('ROLE_DIRECTOR')",
-            securityMessage: "Seul le directeur peut voir la liste du personnel."
-        ),
-        new Post(
-            security: "is_granted('ROLE_DIRECTOR')",
-            securityMessage: "Seul le directeur peut créer du personnel."
-        ),
-        new Get(
-            security: "is_granted('ROLE_DIRECTOR') or object == user",
-            securityMessage: "Vous n'avez pas les droits pour voir ce profil."
-        ),
-        new Put(
-            security: "is_granted('ROLE_DIRECTOR') or object == user",
-            securityMessage: "Vous n'avez pas les droits pour modifier ce profil."
-        ),
-        new Delete(
-            security: "is_granted('ROLE_DIRECTOR')",
-            securityMessage: "Seul le directeur peut supprimer du personnel."
-        ),
+        new GetCollection(security: "is_granted('ROLE_ADMIN')", securityMessage: 'You are not allowed to get users'),
+        new Post(processor: UserPasswordHasherProcessor::class),
+        new Get(security: "is_granted('ROLE_ADMIN') or object == user", securityMessage: 'You are not allowed to get this user'),
+        new Put(processor: UserPasswordHasherProcessor::class, security: "is_granted('ROLE_ADMIN') or object == user", securityMessage: 'You are not allowed to edit this user'),
+        new Patch(processor: UserPasswordHasherProcessor::class, security: "is_granted('ROLE_ADMIN') or object == user", securityMessage: 'You are not allowed to edit this user'),
+        new Delete(security: "is_granted('ROLE_ADMIN') or object == user", securityMessage: 'You are not allowed to delete this user'),
     ],
-    normalizationContext: ['groups' => ['user:read']],
-    denormalizationContext: ['groups' => ['user:write']],
 )]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
