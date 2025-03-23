@@ -7,64 +7,28 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\Delete;
-use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
-use ApiPlatform\Metadata\Patch;
-use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(
-    operations: [
-        new GetCollection(
-            security: "is_granted('ROLE_ASSISTANT')"
-        ),
-        new Post(
-            security: "is_granted('ROLE_VETERINARIAN')",
-            securityMessage: "Seuls les vétérinaires peuvent créer un traitement."
-        ),
-        new Get(
-            security: "is_granted('ROLE_ASSISTANT')"
-        ),
-        new Put(
-            security: "is_granted('ROLE_VETERINARIAN')",
-            securityMessage: "Seuls les vétérinaires peuvent modifier un traitement."
-        ),
-        new Patch(
-            security: "is_granted('ROLE_VETERINARIAN')",
-            securityMessage: "Seuls les vétérinaires peuvent modifier un traitement."
-        ),
-        new Delete(
-            security: "is_granted('ROLE_VETERINARIAN')",
-            securityMessage: "Seuls les vétérinaires peuvent supprimer un traitement."
-        ),
-    ],
-    normalizationContext: ['groups' => ['read']],
-    denormalizationContext: ['groups' => ['write']],
+    normalizationContext: ['groups' => ['traitement:read']],
+    denormalizationContext: ['groups' => ['traitement:write']],
 )]
 #[ORM\Entity(repositoryClass: TreatmentRepository::class)]
 class Treatment
 {
-    #[Groups('read')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['read', 'write'])]
     #[ORM\Column(length: 255)]
     private ?string $nom = null;
 
-    #[Groups(['read', 'write'])]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
-    #[Groups(['read', 'write'])]
     #[ORM\Column]
     private ?int $price = null;
 
-    #[Groups(['read', 'write'])]
     #[ORM\Column(type: 'time')]
     private ?\DateTimeInterface $duration = null;
 

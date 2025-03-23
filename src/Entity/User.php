@@ -19,37 +19,15 @@ use ApiPlatform\Metadata\Put;
 use App\State\UserPasswordHasherProcessor;
 
 #[ApiResource(
-    operations: [
-        new GetCollection(
-            security: "is_granted('ROLE_DIRECTOR')",
-            securityMessage: "Seul le directeur peut voir la liste du personnel."
-        ),
-        new Post(
-            security: "is_granted('ROLE_DIRECTOR')",
-            securityMessage: "Seul le directeur peut créer du personnel.",
-            processor: UserPasswordHasherProcessor::class
-        ),
-//    à décommenter lorsque l'on veut créer un user pour la première fois
-//        new Post(processor: UserPasswordHasherProcessor::class),
-        new Get(
-            security: "is_granted('ROLE_DIRECTOR') or object == user",
-            securityMessage: "Vous n'avez pas les droits pour voir ce profil."
-        ),
-        new Put(
-            security: "is_granted('ROLE_DIRECTOR') or object == user",
-            securityMessage: "Vous n'avez pas les droits pour modifier ce profil."
-        ),
-        new Patch(
-            security: "is_granted('ROLE_DIRECTOR') or object == user",
-            securityMessage: "Vous n'avez pas les droits pour modifier ce profil."
-        ),
-        new Delete(
-            security: "is_granted('ROLE_DIRECTOR')",
-            securityMessage: "Seul le directeur peut supprimer du personnel."
-        ),
-    ],
     normalizationContext: ['groups' => ['read']],
     denormalizationContext: ['groups' => ['write']],
+//    operations: [
+//        new GetCollection(
+//            security: "is_granted('ROLE_DIRECTOR')",
+//            securityMessage: "Seul le directeur peut voir la liste du personnel.",
+//            processor: UserPasswordHasherProcessor::class
+//        ),
+//    ],
 )]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
