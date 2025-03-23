@@ -34,4 +34,4 @@ security:
         - { path: ^/api/docs, roles: PUBLIC_ACCESS }
         # Les routes pour les clients non authentifiés
         - { path: ^/api/animals, methods: [GET], roles: PUBLIC_ACCESS }
-        - { path: ^/api, roles: ROLE_USER }
+        - { path: ^/api, roles: PUBLIC_ACCESS }
