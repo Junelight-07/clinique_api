@@ -7,10 +7,26 @@ security:
             entity:
                 class: App\Entity\User
                 property: email
+
+    role_hierarchy:
+        ROLE_ASSISTANT: ROLE_USER
+        ROLE_VETERINARIAN: ROLE_ASSISTANT
+        ROLE_DIRECTOR: [ROLE_VETERINARIAN, ROLE_ADMIN]
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+
+        login:
+            pattern: ^/api/auth
+            stateless: true
+            json_login:
+                check_path: auth
+                username_path: email
+                password_path: password
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
         api:
             pattern: ^/api
@@ -23,15 +39,16 @@ security:
             provider: app_user_provider
 
             json_login:
-                check_path: app_login
+                check_path: auth
                 username_path: email
                 password_path: password
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
     access_control:
-        - { path: ^/api/login, roles: PUBLIC_ACCESS }
+        - { path: ^/api/auth, roles: PUBLIC_ACCESS }
+        #        la route doit être décommenter pour pouvoir créer le premier user
+        #        - { path: ^/api/users, roles: PUBLIC_ACCESS }
         - { path: ^/api/docs, roles: PUBLIC_ACCESS }
         # Les routes pour les clients non authentifiés
         - { path: ^/api/animals, methods: [GET], roles: PUBLIC_ACCESS }
-        - { path: ^/api, roles: PUBLIC_ACCESS }
