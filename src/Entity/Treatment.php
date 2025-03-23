@@ -9,8 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 
 #[ApiResource(
-    normalizationContext: ['groups' => ['traitement:read']],
-    denormalizationContext: ['groups' => ['traitement:write']],
+//    normalizationContext: ['groups' => ['read']],
+//    denormalizationContext: ['groups' => ['write']],
 )]
 #[ORM\Entity(repositoryClass: TreatmentRepository::class)]
 class Treatment

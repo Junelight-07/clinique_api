@@ -7,20 +7,12 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Patch;
-use ApiPlatform\Metadata\Delete;
-use ApiPlatform\Metadata\Put;
-use App\State\UserPasswordHasherProcessor;
 
 #[ApiResource(
-    normalizationContext: ['groups' => ['read']],
-    denormalizationContext: ['groups' => ['write']],
+//    normalizationContext: ['groups' => ['read']],
+//    denormalizationContext: ['groups' => ['write']],
 //    operations: [
 //        new GetCollection(
 //            security: "is_granted('ROLE_DIRECTOR')",
@@ -36,35 +28,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups('read')]
     private ?int $id = null;
 
-    #[Groups(['read', 'write'])]
     #[ORM\Column(length: 180)]
     private ?string $email = null;
 
     /**
      * @var list<string> The user roles
      */
-    #[Groups(['read', 'write'])]
     #[ORM\Column]
     private array $roles = [];
 
     /**
      * @var string The hashed password
      */
-    #[Groups(['read'])]
     #[ORM\Column]
     private ?string $password = null;
 
-    #[Groups(['write'])]
     private ?string $plainPassword = null;
 
-    #[Groups(['read', 'write'])]
     #[ORM\Column(length: 255)]
     private ?string $firstName = null;
 
-    #[Groups(['read', 'write'])]
     #[ORM\Column(length: 255)]
     private ?string $lastName = null;
 

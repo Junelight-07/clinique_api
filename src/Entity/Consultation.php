@@ -11,8 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 
 #[ApiResource(
-    normalizationContext: ['groups' => ['rdv:read']],
-    denormalizationContext: ['groups' => ['rdv:write']],
+//    normalizationContext: ['groups' => ['read']],
+//    denormalizationContext: ['groups' => ['write']],
 )]
 #[ORM\Entity(repositoryClass: ConsultationRepository::class)]
 class Consultation
