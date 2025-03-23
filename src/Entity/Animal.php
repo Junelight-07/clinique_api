@@ -39,8 +39,8 @@ use ApiPlatform\Metadata\Patch;
             securityMessage: "Seul les assistants peuvet supprimer une fiche animal."
         ),
     ],
-    normalizationContext: ['groups' => ['animal:read']],
-    denormalizationContext: ['groups' => ['animal:write']],
+    normalizationContext: ['groups' => ['read']],
+    denormalizationContext: ['groups' => ['write']],
 )]
 #[ORM\Entity(repositoryClass: AnimalRepository::class)]
 //#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'title' => 'partial', 'content' => 'partial'])]
