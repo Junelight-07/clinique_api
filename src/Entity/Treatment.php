@@ -13,6 +13,7 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Patch;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(
     operations: [
@@ -39,26 +40,31 @@ use ApiPlatform\Metadata\Patch;
             securityMessage: "Seuls les vétérinaires peuvent supprimer un traitement."
         ),
     ],
-    normalizationContext: ['groups' => ['traitement:read']],
-    denormalizationContext: ['groups' => ['traitement:write']],
+    normalizationContext: ['groups' => ['read']],
+    denormalizationContext: ['groups' => ['write']],
 )]
 #[ORM\Entity(repositoryClass: TreatmentRepository::class)]
 class Treatment
 {
+    #[Groups('read')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups(['read', 'write'])]
     #[ORM\Column(length: 255)]
     private ?string $nom = null;
 
+    #[Groups(['read', 'write'])]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
+    #[Groups(['read', 'write'])]
     #[ORM\Column]
     private ?int $price = null;
 
+    #[Groups(['read', 'write'])]
     #[ORM\Column(type: 'time')]
     private ?\DateTimeInterface $duration = null;
 
