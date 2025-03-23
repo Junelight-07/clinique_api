@@ -30,7 +30,7 @@ use App\State\UserPasswordHasherProcessor;
             processor: UserPasswordHasherProcessor::class
         ),
 //    à décommenter lorsque l'on veut créer un user pour la première fois
-        new Post(processor: UserPasswordHasherProcessor::class),
+//        new Post(processor: UserPasswordHasherProcessor::class),
         new Get(
             security: "is_granted('ROLE_DIRECTOR') or object == user",
             securityMessage: "Vous n'avez pas les droits pour voir ce profil."
