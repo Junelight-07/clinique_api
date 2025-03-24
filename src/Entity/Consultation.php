@@ -24,6 +24,12 @@ use Symfony\Component\Serializer\Attribute\Groups;
             security: "is_granted('ROLE_ASSISTANT')",
             securityMessage: "Seul le personnel peut voir la liste des rendez-vous du jour."
         ),
+        new GetCollection(
+            uriTemplate: '/consultations/history',
+            controller: ConsultationController::class . '::getConsultationHistory',
+//            security: "is_granted('ROLE_ASSISTANT') or is_granted('ROLE_VETERINARIAN') or is_granted('ROLE_DIRECTOR')",
+            securityMessage: "Seul le personnel peut consulter l'historique des rendez-vous."
+        ),
         // other operations...
     ],
     normalizationContext: ['groups' => ['read']],

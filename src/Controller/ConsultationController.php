@@ -43,4 +43,45 @@
 
                 return new JsonResponse($json, 200, [], true);
             }
+
+            #[Route('/api/consultations/history', name: 'get_consultation_history', methods: ['GET'])]
+            public function getConsultationHistory(Request $request, SerializerInterface $serializer): JsonResponse
+            {
+                // Check if user has appropriate role
+//                $this->denyAccessUnlessGranted(['ROLE_VETERINARIAN', 'ROLE_ASSISTANT', 'ROLE_DIRECTOR']);
+
+                $startDate = $request->query->get('startDate');
+                $endDate = $request->query->get('endDate');
+
+                if (!$startDate || !$endDate) {
+                    return new JsonResponse(['error' => 'Start date and end date are required'], 400);
+                }
+
+                try {
+                    $startDateTime = new \DateTime($startDate);
+                    $endDateTime = new \DateTime($endDate);
+                    // Add 1 day to end date to include the whole day
+                    $endDateTime->modify('+1 day');
+                } catch (\Exception $e) {
+                    return new JsonResponse(['error' => 'Invalid date format. Use Y-m-d format.'], 400);
+                }
+
+                $consultations = $this->consultationRepository->createQueryBuilder('c')
+                    ->select('c', 'a', 'ast', 'v')
+                    ->leftJoin('c.animal', 'a')
+                    ->leftJoin('c.assistant', 'ast')
+                    ->leftJoin('c.veterinaire', 'v')
+                    ->andWhere('c.consultationDate >= :startDate')
+                    ->andWhere('c.consultationDate < :endDate')
+                    ->setParameter('startDate', $startDateTime)
+                    ->setParameter('endDate', $endDateTime)
+                    ->orderBy('c.consultationDate', 'ASC')
+                    ->getQuery()
+                    ->getResult();
+
+                // Serialize the data with groups
+                $json = $serializer->serialize($consultations, 'json', ['groups' => 'read']);
+
+                return new JsonResponse($json, 200, [], true);
+            }
         }
