@@ -6,7 +6,12 @@ use App\Repository\TreatmentRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
 
+#[ApiResource(
+//    normalizationContext: ['groups' => ['read']],
+//    denormalizationContext: ['groups' => ['write']],
+)]
 #[ORM\Entity(repositoryClass: TreatmentRepository::class)]
 class Treatment
 {

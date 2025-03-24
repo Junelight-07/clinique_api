@@ -6,17 +6,13 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use App\Entity\User;
-use Exception;
-use Symfony\Bundle\SecurityBundle\Security;
 
 class UserPasswordHasherProcessor implements ProcessorInterface
 {
     public function __construct(
         #[Autowire(service: 'api_platform.doctrine.orm.state.persist_processor')]
         private ProcessorInterface $persistProcessor,
-        private UserPasswordHasherInterface $passwordHasher,
-        private Security $security
+        private UserPasswordHasherInterface $passwordHasher
     ) {
     }
 
@@ -26,10 +22,6 @@ class UserPasswordHasherProcessor implements ProcessorInterface
         if (!$data->getPlainPassword()) {
             // On laisse le process s'exécuter
             return $this->persistProcessor->process($data, $operation, $uriVariables, $context);
-        }
-
-        if ($data instanceof User && $data->getId() != null && $data != $this->security->getUser()) {
-            throw new Exception('not allowed to edit password');
         }
 
         // Si on a reçu une valeur pour plainPassword, on hash le mot de passe

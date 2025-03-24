@@ -3,32 +3,37 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Patch;
-use ApiPlatform\Metadata\Delete;
-use ApiPlatform\Metadata\Put;
+use Symfony\Component\Serializer\Annotation\Groups;
 use App\State\UserPasswordHasherProcessor;
 
 #[ApiResource(
+    operations: [
+//        new GetCollection(
+//            security: "is_granted('ROLE_DIRECTOR')",
+//            securityMessage: "Seul le directeur peut voir la liste du personnel.",
+//            processor: UserPasswordHasherProcessor::class
+//        ),
+        new Get(),
+        new GetCollection(),
+        new Patch(),
+        new Delete(),
+        new Post(
+            processor: UserPasswordHasherProcessor::class
+        ),
+        ],
     normalizationContext: ['groups' => ['read']],
     denormalizationContext: ['groups' => ['write']],
-    operations: [
-        new GetCollection(security: "is_granted('ROLE_ADMIN')", securityMessage: 'You are not allowed to get users'),
-        new Post(processor: UserPasswordHasherProcessor::class),
-        new Get(security: "is_granted('ROLE_ADMIN') or object == user", securityMessage: 'You are not allowed to get this user'),
-        new Put(processor: UserPasswordHasherProcessor::class, security: "is_granted('ROLE_ADMIN') or object == user", securityMessage: 'You are not allowed to edit this user'),
-        new Patch(processor: UserPasswordHasherProcessor::class, security: "is_granted('ROLE_ADMIN') or object == user", securityMessage: 'You are not allowed to edit this user'),
-        new Delete(security: "is_granted('ROLE_ADMIN') or object == user", securityMessage: 'You are not allowed to delete this user'),
-    ],
 )]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
@@ -40,25 +45,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups('read')]
     private ?int $id = null;
 
-    #[Groups(['read', 'write'])]
     #[ORM\Column(length: 180)]
+    #[Groups(['read', 'write'])]
     private ?string $email = null;
 
     /**
      * @var list<string> The user roles
      */
-    #[Groups(['read', 'write'])]
     #[ORM\Column]
+    #[Groups(['read', 'write'])]
     private array $roles = [];
 
     /**
      * @var string The hashed password
      */
-    #[Groups(['read'])]
     #[ORM\Column]
+    #[Groups('read')]
     private ?string $password = null;
 
-    #[Groups(['write'])]
+    #[Groups('write')]
     private ?string $plainPassword = null;
 
     #[Groups(['read', 'write'])]

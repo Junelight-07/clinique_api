@@ -16,6 +16,20 @@ class ConsultationRepository extends ServiceEntityRepository
         parent::__construct($registry, Consultation::class);
     }
 
+    public function findTodayConsultations(): array
+    {
+        $today = new \DateTime('today');
+        $tomorrow = (new \DateTime('today'))->modify('+1 day');
+
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.consultationDate >= :today')
+            ->andWhere('c.consultationDate < :tomorrow')
+            ->setParameter('today', $today)
+            ->setParameter('tomorrow', $tomorrow)
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Consultation[] Returns an array of Consultation objects
     //     */

@@ -15,33 +15,28 @@ use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 
 #[ApiResource(
     forceEager: false,
-    normalizationContext: ['groups' => ['read']],
-    denormalizationContext: ['groups' => ['write']],
+//    normalizationContext: ['groups' => ['read']],
+//    denormalizationContext: ['groups' => ['write']],
 )]
 #[ORM\Entity(repositoryClass: AnimalRepository::class)]
 #[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'title' => 'partial', 'content' => 'partial'])]
 #[ApiFilter(OrderFilter::class, properties: ['id', 'createdDate'], arguments: ['orderParameterName' => 'order'])]
 class Animal
 {
-    #[Groups('read')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['read', 'write'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[Groups(['read', 'write'])]
     #[ORM\Column(length: 255)]
     private ?string $species = null;
 
-    #[Groups(['read', 'write'])]
     #[ORM\Column(length: 255)]
     private ?string $birthDate = null;
 
-    #[Groups(['read', 'write'])]
     #[ORM\ManyToOne(inversedBy: 'animal')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Owner $owner = null;
