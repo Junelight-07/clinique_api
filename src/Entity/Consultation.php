@@ -6,6 +6,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use App\Controller\ConsultationController;
 use App\Enum\StatusEnum;
 use App\Repository\ConsultationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -16,6 +17,15 @@ use ApiPlatform\Metadata\ApiResource;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(
+    operations: [
+        new GetCollection(
+            uriTemplate: '/consultations/today',
+            controller: ConsultationController::class . '::getTodayConsultations',
+            security: "is_granted('ROLE_ASSISTANT')",
+            securityMessage: "Seul le personnel peut voir la liste des rendez-vous du jour."
+        ),
+        // other operations...
+    ],
     normalizationContext: ['groups' => ['read']],
     denormalizationContext: ['groups' => ['write']],
 )]
