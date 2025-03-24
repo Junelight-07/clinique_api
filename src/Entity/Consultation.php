@@ -60,12 +60,12 @@ class Consultation
     private ?Animal $animal = null;
 
     #[ORM\ManyToOne(inversedBy: 'consultations')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     #[Groups(['read', 'write'])]
     private ?User $assistant = null;
 
     #[ORM\ManyToOne(inversedBy: 'consultations')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     #[Groups(['read', 'write'])]
     private ?User $veterinaire = null;
 
