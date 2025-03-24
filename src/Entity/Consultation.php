@@ -2,6 +2,10 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
 use App\Enum\StatusEnum;
 use App\Repository\ConsultationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -9,41 +13,54 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(
-//    normalizationContext: ['groups' => ['read']],
-//    denormalizationContext: ['groups' => ['write']],
+    normalizationContext: ['groups' => ['read']],
+    denormalizationContext: ['groups' => ['write']],
 )]
+#[Post(security: "is_granted('ROLE_ASSISTANT')")]
+#[Get(security: "is_granted('ROLE_ASSISTANT')")]
+#[GetCollection(security: "is_granted('ROLE_ASSISTANT')")]
+#[Patch(security: "is_granted('ROLE_ASSISTANT')")]
 #[ORM\Entity(repositoryClass: ConsultationRepository::class)]
 class Consultation
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('read')]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups('read')]
     private ?\DateTimeInterface $createdDate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['read', 'write'])]
     private ?\DateTimeInterface $consultationDate = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['read', 'write'])]
     private ?string $motif = null;
 
     #[ORM\ManyToOne(inversedBy: 'consultations')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['read', 'write'])]
     private ?Animal $animal = null;
 
     #[ORM\ManyToOne(inversedBy: 'consultations')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['read', 'write'])]
     private ?User $assistant = null;
 
     #[ORM\ManyToOne(inversedBy: 'consultations')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['read', 'write'])]
     private ?User $veterinaire = null;
 
     #[ORM\Column(enumType: StatusEnum::class)]
+    #[Groups(['read', 'write'])]
     private ?StatusEnum $status = null;
 
     /**

@@ -47,6 +47,7 @@ security:
 
     access_control:
         - { path: ^/api/auth, roles: PUBLIC_ACCESS }
+        - { path: ^/api/consultations, roles: [ROLE_ASSISTANT] }
         #        la route doit être décommenter pour pouvoir créer le premier user
         #        - { path: ^/api/users, roles: PUBLIC_ACCESS }
         - { path: ^/api/docs, roles: PUBLIC_ACCESS }
